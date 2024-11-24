@@ -1,0 +1,42 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ollama-local:/root/.ollama
+      - ./ollama:/ollama
+    networks:
+      - ollama-docker
+    entrypoint: ["/bin/sh", "/ollama/run_ollama.sh"]
+    healthcheck:
+      test: [ "CMD", "ollama", "run", "llama3.2", "test" ]
+      interval: 10s
+      timeout: 30s
+      retries: 5
+      start_period: 1s
+  node:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+      - /Volumes:/rename # Put the path to the root folder of the folder you want to rename here
+    environment:
+      NODE_ENV: development
+      # In this case, it would rename the folder /Volumes/Movies/series/Family Guy/Season 11
+      FOLDER: /Movies/series/Family Guy/Season 11 # Put the path of the folder you want to rename here
+    command: "npm start" # Start the app
+    depends_on:
+      ollama:
+        condition: service_healthy
+    # restart: always # Restart if it crashes
+    networks:
+      - ollama-docker
+
+networks:
+  ollama-docker:
+    external: false
+
+volumes:
+  ollama-local:
+    external: false
