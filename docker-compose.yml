@@ -25,11 +25,10 @@ services:
       NODE_ENV: development
       # In this case, it would rename the folder /Volumes/Movies/series/Family Guy/Season 11
       FOLDER: /Movies/series/Family Guy/Season 11 # Put the path of the folder you want to rename here
-    command: "npm start" # Start the app
+    command: "npm start"
     depends_on:
       ollama:
         condition: service_healthy
-    # restart: always # Restart if it crashes
     networks:
       - ollama-docker
 
