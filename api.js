@@ -5,7 +5,7 @@ const logger = pino();
 
 // Setting up the Ollama API
 const ollama = new Ollama({
-    host: 'http://ollama:11434'
+    host: process.env.OLLAMA_HOST || 'http://localhost:11434'
 })
 
 /**
