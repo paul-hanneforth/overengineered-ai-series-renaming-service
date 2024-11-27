@@ -39,7 +39,7 @@ This tool renames TV show files to follow the Jellyfin naming convention, ensuri
 
 3. Run the program:
    ```bash
-   docker-compose up
+   docker-compose up --abort-on-container-exit
 
 ### Notes
 - The renaming process may take a significant amount of time, particularly on the first run.
