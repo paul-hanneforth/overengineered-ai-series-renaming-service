@@ -39,6 +39,12 @@ import { request } from './api.js'
  * }
  */
 function traverseDirectory(dir) {
+    /**
+     * @type {object} result
+     * @property {string} path - The full path of the current directory.
+     * @property {Array<object>} subfolders - An array of objects, each representing a subdirectory.
+     * @property {Array<string>} files - An array of file paths within the current directory.
+     */
     const result = {
         path: dir,
         subfolders: [],
@@ -66,8 +72,8 @@ function traverseDirectory(dir) {
 /**
  * @typedef {Object} Details
  * @property {string} series - The name of the series.
- * @property {string} season - The season number.
- * @property {string} episode - The episode number.
+ * @property {number} season - The season number.
+ * @property {number} episode - The episode number.
  */
 /**
  * 
@@ -171,7 +177,7 @@ async function getSeriesName(filePath) {
 
 /**
  * The file actually needs to be an episode.
- * @param {String} filePath 
+ * @param {string} filePath 
  * @returns {Promise<number>} seasonNumber
  */
 async function getSeasonNumber(filePath) {
@@ -199,6 +205,20 @@ async function getSeasonNumber(filePath) {
     }
 }
 
+/**
+ * 
+ * @param {string} seriesName 
+ * @param {number} seasonNumber 
+ * @param {number} episodeNumber 
+ * @param {string} filePath 
+ * @returns {Promise<string>} newFileName
+ */
+async function getNewFileName(seriesName, seasonNumber, episodeNumber, filePath) {
+    
+    return `${seriesName} S${seasonNumber.toString().padStart(2, '0')}E${episodeNumber.toString().padStart(2, '0')}${path.extname(filePath)}`;
+
+}
+
 async function renameFilesInDirectory(dir) {
     const result = await traverseDirectory(dir);
 
@@ -215,7 +235,7 @@ async function renameFilesInDirectory(dir) {
             // Get details from the file
             const details = await getDetails(file);
 
-            const newFileName = `${details.series} S${details.season.toString().padStart(2, '0')}E${details.episode.toString().padStart(2, '0')}${path.extname(file)}`;
+            const newFileName = await getNewFileName(details.series, details.season, details.episode, file);
             const newFilePath = path.join(path.dirname(file), newFileName);
 
             // Rename the file
@@ -290,6 +310,6 @@ Respond with a JSON object: { "classification": "Movie" | "Episode" | "Unrelated
 };
 
 // get environment variable 'FOLDER' and join with '/rename'
-const filePath = path.join('/rename', process.env.FOLDER);
+const filePath = path.join('/rename', process.env.FOLDER || '');
 
 renameFilesInDirectory(filePath)

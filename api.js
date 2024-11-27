@@ -56,7 +56,7 @@ const request = async (system, input, examples = []) => {
  * Request the Ollama API and ensures that only JSON is returned. If the request fails, the function will try again.
  * @param {string} system 
  * @param {string} input
- * @param {Object[]} examples
+ * @param {Object[]} [ examples ]
  * @param {string} examples[].input
  * @param {string} examples[].output
  * @returns {Promise<object>} - A JSON object response from the Ollama API.
