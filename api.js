@@ -1,4 +1,7 @@
 import { Ollama } from 'ollama'
+import pino from 'pino'
+
+const logger = pino();
 
 // Setting up the Ollama API
 const ollama = new Ollama({
@@ -38,7 +41,9 @@ const request = async (system, input, examples = []) => {
             ],
             options: { stop: ["```"] }
         });
-    
+
+        logger.debug(`Ollama API response: ${response.message.content}`);
+
         // Returning the response message content as JSON
         try {
             return JSON.parse(response.message.content);

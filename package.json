@@ -5,13 +5,16 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index.js | pino-pretty",
+    "dev": "node index.js | pino-pretty"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "ollama": "^0.5.10"
+    "ollama": "^0.5.10",
+    "pino": "^9.5.0",
+    "pino-pretty": "^13.0.0"
   }
 }

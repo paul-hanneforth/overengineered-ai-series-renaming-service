@@ -1,11 +1,20 @@
 import fs from 'fs'
 import path from 'path'
 import { request } from './api.js'
+import pino from 'pino'
 
+const logger = pino();
+
+/**
+ * @typedef {Object} Directory
+ * @property {string} path - The full path of the current directory.
+ * @property {Directory[]} subfolders - An array of objects, each representing a subdirectory.
+ * @property {string[]} files - An array of file paths within the current directory.
+ */
 /**
  * Recursively traverses directories and structures the response.
  * @param {string} dir - The directory to start traversing from.
- * @returns {object} - A structured representation of the directory and its contents.
+ * @returns {Directory} - A structured representation of the directory and its contents.
  * 
  * The returned object has the following structure:
  * {
@@ -206,6 +215,104 @@ async function getSeasonNumber(filePath) {
 }
 
 /**
+ * Goes through all the files and checks if they match the format 'Series Name - SXXEYY' If even one file does not match the format, return false. If all files match the format, return true.
+ * @param {string[]} filePaths 
+ * @returns {Promise<boolean>} returns true if all episodes match the format, false otherwise
+ */
+async function checkIfEpisodeMatchesFormatInBatch(filePaths) {
+
+    const system = `It is your job to check whether the files, which represent episodes of a series, all match the following series format: 'Series Name - SXXEYY'. Return a JSON object: { "matches": true | false }.
+If even one file does not match the format, return false. If all files match the format, return true. Be aware that all files need to follow the series format exactly without even one character difference. If you are unsure, return false. Return a JSON object: { "matches": true | false }.`;
+
+    const examples = [
+        {
+            input: JSON.stringify(['/Volumes/Movies/series/Family Guy/Season 03/Family Guy - S03E05 - And The Wiener Is.mkv', '/Volumes/Movies/series/Family Guy/Season 03/Family Guy - S03E06 - Death Lives.mkv']),
+            output: JSON.stringify({ "matches": false })
+        },
+        {
+            input: JSON.stringify(['/Volumes/Movies/series/Family Guy/Season 03/Family Guy - S03E05', '/Volumes/Movies/series/Family Guy/Season 03/Family Guy - S03E06']),
+            output: JSON.stringify({ "matches": true })
+        },
+        {
+            input: JSON.stringify([
+                '/Volumes/Shared/todo/Temptation Island/Season 01/Temptation.Island.S01E01.1080p.PCOK.WEB-DL.DDP5.1.x264-WhiteHat.mkv',
+                '/Volumes/Shared/todo/Temptation Island/Season 01/Temptation.Island.S01E02.1080p.PCOK.WEB-DL.DDP5.1.x264-WhiteHat.mkv',
+                '/Volumes/Shared/todo/Temptation Island/Season 01/Temptation.Island.S01E03.1080p.PCOK.WEB-DL.DDP5.1.x264-WhiteHat.mkv',
+                '/Volumes/Shared/todo/Temptation Island/Season 01/Temptation.Island.S01E04.1080p.PCOK.WEB-DL.DDP5.1.x264-WhiteHat.mkv',
+                '/Volumes/Shared/todo/Temptation Island/Season 01/Temptation.Island.S01E05.1080p.PCOK.WEB-DL.DDP5.1.x264-WhiteHat.mkv',
+                '/Volumes/Shared/todo/Temptation Island/Season 01/Temptation.Island.S01E06.1080p.PCOK.WEB-DL.DDP5.1.x264-WhiteHat.mkv',
+                '/Volumes/Shared/todo/Temptation Island/Season 01/Temptation.Island.S01E07.1080p.PCOK.WEB-DL.DDP5.1.x264-WhiteHat.mkv',
+                '/Volumes/Shared/todo/Temptation Island/Season 01/Temptation.Island.S01E08.1080p.PCOK.WEB-DL.DDP5.1.x264-WhiteHat.mkv',
+                '/Volumes/Shared/todo/Temptation Island/Season 01/Temptation.Island.S01E09.1080p.PCOK.WEB-DL.DDP5.1.x264-WhiteHat.mkv',
+                '/Volumes/Shared/todo/Temptation Island/Season 01/Temptation.Island.S01E10.1080p.PCOK.WEB-DL.DDP5.1.x264-WhiteHat.mkv',
+                '/Volumes/Shared/todo/Temptation Island/Season 01/Temptation.Island.S01E11.1080p.PCOK.WEB-DL.DDP5.1.x264-WhiteHat.mkv'
+            ]),
+            output: JSON.stringify({ "matches": false })
+        },
+        {
+            input: JSON.stringify([
+                '/Volumes/Movies/series/Family Guy/Season 01/Family Guy S01E01.mkv',
+                '/Volumes/Movies/series/Family Guy/Season 01/Family Guy S01E02.mkv',
+                '/Volumes/Movies/series/Family Guy/Season 01/Family Guy S01E03.mkv',
+                '/Volumes/Movies/series/Family Guy/Season 01/Family Guy S01E04.mkv',
+                '/Volumes/Movies/series/Family Guy/Season 01/Family Guy S01E05.mkv',
+                '/Volumes/Movies/series/Family Guy/Season 01/Family Guy S01E06.mkv',
+                '/Volumes/Movies/series/Family Guy/Season 01/Family Guy S01E07.mkv'
+            ]),
+            output: JSON.stringify({ "matches": true })
+        },
+        {
+            input: JSON.stringify([
+                '/Volumes/Movies/series/Family Guy/Season 01/Family Guy S01E01.mkv',
+                '/Volumes/Movies/series/Family Guy/Season 01/Family Guy S01E02.mkv',
+                '/Volumes/Movies/series/Family Guy/Season 01/Family Guy S01E03 - The Sheep in the bag.mkv',
+                '/Volumes/Movies/series/Family Guy/Season 01/Family Guy S01E04.mkv',
+                '/Volumes/Movies/series/Family Guy/Season 01/Family Guy S01E05.mkv',
+                '/Volumes/Movies/series/Family Guy/Season 01/Family Guy S01E06.mkv',
+                '/Volumes/Movies/series/Family Guy/Season 01/Family Guy S01E07.mkv'
+            ]),
+            output: JSON.stringify({ "matches": false })
+        },
+        {
+            input: JSON.stringify([
+                '/Volumes/Movies/series/Invincible/Season 02/Invincible S02E01.mkv',
+                '/Volumes/Movies/series/Invincible/Season 02/Invincible S02E02.mkv',
+                '/Volumes/Movies/series/Invincible/Season 02/Invincible S02E03.mkv',
+                '/Volumes/Movies/series/Invincible/Season 02/Invincible S02E04.mkv',
+                '/Volumes/Movies/series/Invincible/Season 02/Invincible S02E05.mkv',
+                '/Volumes/Movies/series/Invincible/Season 02/Invincible S02E06.mkv',
+                '/Volumes/Movies/series/Invincible/Season 02/Invincible S02E08.mkv',
+                '/Volumes/Movies/series/Invincible/Season 02/Invincible S02E7.mkv'
+            ]),
+            output: JSON.stringify({ "matches": false }) 
+        },
+        {
+            input: JSON.stringify([
+                '/Volumes/Movies/series/.DS_Store',
+                '/Volumes/Movies/series/output.txt',
+                '/Volumes/Movies/series/rename.py'
+            ]),
+            output: JSON.stringify({ "matches": false }) 
+        }
+    ]
+
+    try {
+        // Call Ollama API
+        const jsonResponse = await request(system, JSON.stringify(filePaths), examples);
+
+        // check if the response contains the matches field
+        if (jsonResponse.matches == null || jsonResponse.matches == undefined || typeof jsonResponse.matches !== 'boolean') {
+            throw new Error('Matches field not found in the response');
+        }
+
+        return jsonResponse.matches;
+    } catch (error) {
+        throw new Error(`Failed to check if episodes match format in batch from Ollama API: ${error.message}`);
+    }
+
+}
+
+/**
  * 
  * @param {string} seriesName 
  * @param {number} seasonNumber 
@@ -219,33 +326,47 @@ async function getNewFileName(seriesName, seasonNumber, episodeNumber, filePath)
 
 }
 
+/**
+ * 
+ * @param {string} dir the directory to rename files in 
+ */
 async function renameFilesInDirectory(dir) {
     const result = await traverseDirectory(dir);
 
-    for (const file of result.files) {
-        try {
+    // check whether the files are in the correct format already
+    const matchesFormat = await checkIfEpisodeMatchesFormatInBatch(result.files);
+    if(matchesFormat) {
 
-            // Check whether the file is actually a episode
-            const classification = await classifyFile(file);
-            if(classification !== 'Episode') {
-                console.log(`Skipping: ${file} (Not an episode)`);
-                continue;
+        logger.info(`All files in ${dir} are already in the correct format.`);
+
+    } else {
+
+        for (const file of result.files) {
+            try {
+
+                // Check whether the file is actually a episode
+                const classification = await classifyFile(file);
+                if(classification !== 'Episode') {
+                    logger.info(`Skipping: ${file} (Not an episode)`);
+                    continue;
+                }
+
+                // Get details from the file
+                const details = await getDetails(file);
+
+                const newFileName = await getNewFileName(details.series, details.season, details.episode, file);
+                const newFilePath = path.join(path.dirname(file), newFileName);
+
+                // Rename the file
+                fs.renameSync(file, newFilePath);
+
+                // Print the renaming action
+                logger.info(`Renamed: ${file} -> ${newFilePath}`);
+            } catch (error) {
+                console.error(`Failed to rename ${file}: ${error.message}`);
             }
-
-            // Get details from the file
-            const details = await getDetails(file);
-
-            const newFileName = await getNewFileName(details.series, details.season, details.episode, file);
-            const newFilePath = path.join(path.dirname(file), newFileName);
-
-            // Rename the file
-            fs.renameSync(file, newFilePath);
-
-            // Print the renaming action
-            console.log(`Renamed: ${file} -> ${newFilePath}`);
-        } catch (error) {
-            console.error(`Failed to rename ${file}: ${error.message}`);
         }
+
     }
 
     // Also rename files in subdirectories
