@@ -1,4 +1,4 @@
-import { getDetails, getEpisodeNumber, getSeasonNumber, getSeriesName } from "./lib";
+import { checkIfEpisodeMatchesFormatInBatch, getDetails, getEpisodeNumber, getSeasonNumber, getSeriesName } from "./lib";
 import { request } from "./api";
 
 const defaultTimeout = 1000 * 30;
@@ -41,5 +41,27 @@ test("Get details from filename", async () => {
     expect(details.series).toBe("Temptation Island");
     expect(details.season).toBe(4);
     expect(details.episode).toBe(3);
+
+}, defaultTimeout)
+
+test("Check if episodes match format in batch", async () => {
+
+    const episodesInWrongFormat = [
+        "Movies/series/Temptation Island/Season 04/Temptation.Island.2019.S04E03.1080p.PCOK.WEB-DL.DDP5.1.x264-",
+        "Movies/series/Temptation Island/Season 04/Temptation.Island.2019.S04E04.1080p.PCOK.WEB-DL.DDP5.1.x264-",
+        "Movies/series/Temptation Island/Season 04/Temptation.Island.2019.S04E05.1080p.PCOK.WEB-DL.DDP5.1.x264-",
+    ];
+
+    const match1 = await checkIfEpisodeMatchesFormatInBatch(episodesInWrongFormat);
+    expect(match1).toBe(false);
+
+    const episodesInRightFormat = [
+        "Movies/series/Temptation Island/Season 04/Temptation Island S04E03",
+        "Movies/series/Temptation Island/Season 04/Temptation Island S04E04",
+        "Movies/series/Temptation Island/Season 04/Temptation Island S04E05",
+    ]
+
+    const match2 = await checkIfEpisodeMatchesFormatInBatch(episodesInRightFormat);
+    expect(match2).toBe(true);
 
 }, defaultTimeout)
