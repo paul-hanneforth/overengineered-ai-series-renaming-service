@@ -85,15 +85,11 @@ function traverseDirectory(dir) {
  * @property {number} episode - The episode number.
  */
 /**
- * 
+ * The file path actually needs to represent an episode.
  * @param {string} filePath 
  * @returns {Promise<Details>} details
  */
-async function getDetails(filePath) {
-    // Check if the file exists
-    if (!fs.existsSync(filePath)) {
-        throw new Error(`File not found: ${filePath}`);
-    }
+export async function getDetails(filePath) {
 
     const episodeNumber = await getEpisodeNumber(filePath);
     const seriesName = await getSeriesName(filePath);
