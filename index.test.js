@@ -1,4 +1,4 @@
-import { getEpisodeNumber } from "./lib";
+import { getEpisodeNumber, getSeasonNumber, getSeriesName } from "./lib";
 import { request } from "./api";
 
 const defaultTimeout = 1000 * 30;
@@ -15,5 +15,21 @@ test("Get episode number from filename", async () => {
     const episodeNumber = await getEpisodeNumber("Movies/series/Temptation Island/Season 04/Temptation.Island.2019.S04E03.1080p.PCOK.WEB-DL.DDP5.1.x264-");
 
     expect(episodeNumber).toBe(3);
+
+}, defaultTimeout);
+
+test("Get season number from filename", async () => {
+
+    const seasonNumber = await getSeasonNumber("Movies/series/Temptation Island/Season 04/Temptation.Island.2019.S04E03.1080p.PCOK.WEB-DL.DDP5.1.x264-");
+
+    expect(seasonNumber).toBe(4);
+
+}, defaultTimeout);
+
+test("Get series name from filename", async () => {
+
+    const showName = await getSeriesName("Movies/series/Temptation Island/Season 04/Temptation.Island.2019.S04E03.1080p.PCOK.WEB-DL.DDP5.1.x264-");
+
+    expect(showName).toBe("Temptation Island");
 
 }, defaultTimeout);

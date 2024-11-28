@@ -144,15 +144,11 @@ export async function getEpisodeNumber(filePath) {
 }
 
 /**
- * The file actually needs to be an episode.
+ * The file path actually needs to represent an episode.
  * @param {String} filePath 
  * @returns {Promise<string>} seriesName
  */
-async function getSeriesName(filePath) {
-    // Check if the file exists
-    if (!fs.existsSync(filePath)) {
-        throw new Error(`File not found: ${filePath}`);
-    }
+export async function getSeriesName(filePath) {
 
     // Prepare prompt for Ollama
     const system = "It is your job to extract the series name from file paths I give you. You will be given a file path and you must extract the series name from the file path or name. Please remember that sometimes the series names can be in weird formats Respond with a JSON object: { 'series': 'Series Name' }.";
@@ -180,15 +176,11 @@ async function getSeriesName(filePath) {
 }
 
 /**
- * The file actually needs to be an episode.
+ * The file path actually needs to represent an episode.
  * @param {string} filePath 
  * @returns {Promise<number>} seasonNumber
  */
-async function getSeasonNumber(filePath) {
-    // Check if the file exists
-    if (!fs.existsSync(filePath)) {
-        throw new Error(`File not found: ${filePath}`);
-    }
+export async function getSeasonNumber(filePath) {
 
     // Prepare prompt for Ollama
     const system = "It is your job to extract the season number from file paths I give you. You will be given a file path and you must extract the season number from the file path or name. Please remember that sometimes the season numbers can be in weird formats Respond with a JSON object: { 'season': 'Season Number' }";
