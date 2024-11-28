@@ -1,7 +1,7 @@
 import { checkIfEpisodeMatchesFormatInBatch, getDetails, getEpisodeNumber, getSeasonNumber, getSeriesName } from "./lib";
 import { request } from "./api";
 
-const defaultTimeout = 1000 * 30;
+const defaultTimeout = 1000 * 60 * 5;
 
 test('Ollama API request', async () => {
 

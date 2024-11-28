@@ -1,0 +1,34 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ./ollama:/ollama
+    networks:
+      - ollama-docker
+    entrypoint: ["/bin/sh", "/ollama/run_ollama.sh"]
+    healthcheck:
+      test: [ "CMD", "ollama", "run", "llama3.2", "test" ]
+      interval: 10s
+      timeout: 30s
+      retries: 10
+      start_period: 1s
+  node_test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+      NODE_ENV: development
+    command: "npm run test"
+    depends_on:
+      ollama:
+        condition: service_healthy
+    networks:
+      - ollama-docker
+
+networks:
+  ollama-docker:
+    external: false
