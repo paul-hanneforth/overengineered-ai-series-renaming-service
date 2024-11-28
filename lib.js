@@ -202,9 +202,9 @@ export async function getSeasonNumber(filePath) {
  * @param {string[]} filePaths 
  * @returns {Promise<boolean>} returns true if all episodes match the format, false otherwise
  */
-async function checkIfEpisodeMatchesFormatInBatch(filePaths) {
+export async function checkIfEpisodeMatchesFormatInBatch(filePaths) {
 
-    const system = `It is your job to check whether the files, which represent episodes of a series, all match the following series format: 'Series Name - SXXEYY'. Return a JSON object: { "matches": true | false }.
+    const system = `It is your job to check whether the files, which represent episodes of a series, all match the following series format: 'Series Name SXXEYY'. Return a JSON object: { "matches": true | false }.
 If even one file does not match the format, return false. If all files match the format, return true. Be aware that all files need to follow the series format exactly without even one character difference. If you are unsure, return false. Return a JSON object: { "matches": true | false }.`;
 
     const examples = [
@@ -213,7 +213,7 @@ If even one file does not match the format, return false. If all files match the
             output: JSON.stringify({ "matches": false })
         },
         {
-            input: JSON.stringify(['/Volumes/Movies/series/Family Guy/Season 03/Family Guy - S03E05', '/Volumes/Movies/series/Family Guy/Season 03/Family Guy - S03E06']),
+            input: JSON.stringify(['/Volumes/Movies/series/Family Guy/Season 03/Family Guy S03E05', '/Volumes/Movies/series/Family Guy/Season 03/Family Guy S03E06']),
             output: JSON.stringify({ "matches": true })
         },
         {
