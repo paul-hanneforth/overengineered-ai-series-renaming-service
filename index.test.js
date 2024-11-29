@@ -1,14 +1,17 @@
 import { checkIfEpisodeMatchesFormatInBatch, getDetails, getEpisodeNumber, getSeasonNumber, getSeriesName } from "./lib";
 import { request } from "./api";
+import { jest } from '@jest/globals'
 
 const defaultTimeout = 1000 * 60 * 5;
+
+jest.setTimeout(defaultTimeout);
 
 test('Ollama API request', async () => {
 
     const response = await request('You should exactly return the JSON Object { "test": true }', 'Only return the JSON Object { "test": true }');
     expect(response).toBeDefined();
 
-}, defaultTimeout);
+});
 
 test("Get episode number from filename", async () => {
 
@@ -16,7 +19,7 @@ test("Get episode number from filename", async () => {
 
     expect(episodeNumber).toBe(3);
 
-}, defaultTimeout);
+});
 
 test("Get season number from filename", async () => {
 
@@ -24,7 +27,7 @@ test("Get season number from filename", async () => {
 
     expect(seasonNumber).toBe(4);
 
-}, defaultTimeout);
+});
 
 test("Get series name from filename", async () => {
 
@@ -32,17 +35,27 @@ test("Get series name from filename", async () => {
 
     expect(showName).toBe("Temptation Island");
 
-}, defaultTimeout);
+});
 
-test("Get details from filename", async () => {
+describe("Get details from filename", () => {
 
-    const details = await getDetails("Movies/series/Temptation Island/Season 04/Temptation.Island.2019.S04E03.1080p.PCOK.WEB-DL.DDP5.1.x264-");
-    
-    expect(details.series).toBe("Temptation Island");
-    expect(details.season).toBe(4);
-    expect(details.episode).toBe(3);
+    let details;
 
-}, defaultTimeout)
+    beforeAll(async () => {
+        details = await getDetails("Movies/series/Temptation Island/Season 04/Temptation.Island.2019.S04E03.1080p.PCOK.WEB-DL.DDP5.1.x264-");
+    })
+
+    it("Should return series name", () => {
+        expect(details.series).toBe("Temptation Island");
+    })
+    it("Should return season number", () => {
+        expect(details.season).toBe(4);
+    })
+    it("Should return episode number", () => {
+        expect(details.episode).toBe(3);
+    })
+
+})
 
 describe("Check if episode matches format", () => {
 
@@ -51,7 +64,7 @@ describe("Check if episode matches format", () => {
         const match1 = await checkIfEpisodeMatchesFormatInBatch([]);
         expect(match1).toBe(true);
 
-    }, defaultTimeout)
+    })
     it("Should return true if episode matches format", async () => {
 
         const episodesInRightFormat = [
@@ -72,7 +85,7 @@ describe("Check if episode matches format", () => {
         const match3 = await checkIfEpisodeMatchesFormatInBatch(episodesInRightFormat2);
         expect(match3).toBe(true);
 
-    }, defaultTimeout);
+    });
 
     it("Should return false if episode does not match format", async () => {
         
@@ -85,6 +98,6 @@ describe("Check if episode matches format", () => {
         const match1 = await checkIfEpisodeMatchesFormatInBatch(episodesInWrongFormat);
         expect(match1).toBe(false);
 
-    }, defaultTimeout);
+    });
 
 });
