@@ -307,6 +307,11 @@ export async function checkIfEpisodeMatchesFormatInBatch(filePaths) {
         return true;
     }
 
+    const classification = await classifyFile(filePaths[0]);
+    if(classification !== 'Episode') {
+        return false;
+    }
+    
     const seriesName = await getSeriesName(filePaths[0]);
     const seasonNumber = await getSeasonNumber(filePaths[0]);
 
@@ -390,7 +395,7 @@ export async function renameFilesInDirectory(dir) {
  * @param {string} filePath - The full path to the file.
  * @returns {Promise<string>} - The classification result: 'Movie', 'Episode', or 'Unrelated'.
  */
-const classifyFile = async (filePath) => {
+export const classifyFile = async (filePath) => {
     try {
         // Prepare the prompt for the Ollama API
         const system = `It is your job to classify file paths I give you. 
