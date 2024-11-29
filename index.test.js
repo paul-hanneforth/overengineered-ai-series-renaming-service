@@ -92,8 +92,8 @@ describe("Check if episode matches format", () => {
             "Movies/series/Temptation Island/Season 04/Temptation Island S04E05",
         ]
     
-        const match2 = await checkIfEpisodeMatchesFormatInBatch(episodesInRightFormat);
-        expect(match2).toBe(true);
+        const match1 = await checkIfEpisodeMatchesFormatInBatch(episodesInRightFormat);
+        expect(match1).toBe(true);
 
         const episodesInRightFormat2 = [
             "Movies/series/Family Guy/Season 01/Family Guy S01E03",
@@ -101,7 +101,16 @@ describe("Check if episode matches format", () => {
             "Movies/series/Family Guy/Season 01/Family Guy S01E05",
         ]
     
-        const match3 = await checkIfEpisodeMatchesFormatInBatch(episodesInRightFormat2);
+        const match2 = await checkIfEpisodeMatchesFormatInBatch(episodesInRightFormat2);
+        expect(match2).toBe(true);
+
+        const episodesInRightFormat3 = [
+            "/Volumes/Movies/series/3 Body Problem/Season 01/3 Body Problem S01E01.mkv",
+            "/Volumes/Movies/series/3 Body Problem/Season 01/3 Body Problem S01E02.mkv",
+            "/Volumes/Movies/series/3 Body Problem/Season 01/3 Body Problem S01E03.mkv",
+        ]
+
+        const match3 = await checkIfEpisodeMatchesFormatInBatch(episodesInRightFormat3);
         expect(match3).toBe(true);
 
     });

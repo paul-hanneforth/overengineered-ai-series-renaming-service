@@ -48,7 +48,7 @@ const request = async (system, input, examples = []) => {
         try {
             return JSON.parse(response.message.content);
         } catch(e) {
-            console.error(`Failed to parse JSON response from Ollama API: ${response.message.content}`);
+            logger.warn(`Failed to parse JSON response from Ollama API: ${response.message.content}`);
             throw e;
         }
     } catch (error) {
@@ -77,7 +77,7 @@ const requestWrapper = async (system, input, examples) => {
             return response;
 
         } catch (error) {
-            console.error(`Failed to get a valid JSON response from Ollama API: ${error.message}. Trying again ...`);
+            logger.warn(`Failed to get a valid JSON response from Ollama API: ${error.message}. Trying again ...`);
             tries++;
         }
     }

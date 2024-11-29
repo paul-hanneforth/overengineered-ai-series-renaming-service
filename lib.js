@@ -309,6 +309,7 @@ export async function checkIfEpisodeMatchesFormatInBatch(filePaths) {
 
     const classification = await classifyFile(filePaths[0]);
     if(classification !== 'Episode') {
+        logger.debug("Couldn't check if episode matches format in batch because the first file is not an episode. First file: ", filePaths[0]);
         return false;
     }
     
@@ -318,9 +319,19 @@ export async function checkIfEpisodeMatchesFormatInBatch(filePaths) {
     const paddedSeasonNumber = seasonNumber.toString().padStart(2, '0');
 
     const matches = filePaths.every(filePath => {
+        // remove the directory path and file extension, keep only the file name
         const fileName = path.basename(filePath);
-        const regex = new RegExp(`^${seriesName} S${paddedSeasonNumber}E\\d{2}$`);
-        return regex.test(fileName);
+        const fileNameWithoutExtension = path.parse(fileName).name;
+
+        const exp = `^${seriesName} S${paddedSeasonNumber}E\\d{2}$`;
+        const regex = new RegExp(exp);
+        const match = regex.test(fileNameWithoutExtension);
+
+        if(!match) {
+            logger.debug(`File "${fileNameWithoutExtension}" did not match the format ("${seriesName} S${paddedSeasonNumber}EXX").`);
+        }
+
+        return match;
     });
 
     return matches;
