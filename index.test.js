@@ -1,4 +1,4 @@
-import { checkIfEpisodeMatchesFormatInBatch, getDetails, getEpisodeNumber, getSeasonNumber, getSeriesName } from "./lib";
+import { checkIfEpisodeMatchesFormatInBatch, classifyFile, getDetails, getEpisodeNumber, getSeasonNumber, getSeriesName } from "./lib";
 import { request } from "./api";
 import { jest } from '@jest/globals'
 
@@ -34,6 +34,25 @@ test("Get series name from filename", async () => {
     const showName = await getSeriesName("Movies/series/Temptation Island/Season 04/Temptation.Island.2019.S04E03.1080p.PCOK.WEB-DL.DDP5.1.x264-");
 
     expect(showName).toBe("Temptation Island");
+
+});
+
+describe("Classify file", () => {
+    
+    it("Should return 'Episode' if file is a series", async () => {
+        const type = await classifyFile("Movies/series/Temptation Island/Season 04/Temptation.Island.2019.S04E03.1080p.PCOK.WEB-DL.DDP5.1.x264-");
+        expect(type).toBe("Episode");
+    });
+
+    it("Should return 'Movie' if file is a movie", async () => {
+        const type = await classifyFile("Movies/series/Temptation Island/Temptation Island - The Movie");
+        expect(type).toBe("Movie");
+    });
+
+    it("Should return 'Unrelated' if file is neither a movie nor a series", async () => {
+        const type = await classifyFile("Movies/series/Temptation Island/Season 04/.DS_Store");
+        expect(type).toBe("Unrelated");
+    });
 
 });
 
