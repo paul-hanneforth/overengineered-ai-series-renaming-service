@@ -44,24 +44,41 @@ test("Get details from filename", async () => {
 
 }, defaultTimeout)
 
-test("Check if episodes match format in batch", async () => {
+describe("Check if episode matches format", () => {
 
-    const episodesInWrongFormat = [
-        "Movies/series/Temptation Island/Season 04/Temptation.Island.2019.S04E03.1080p.PCOK.WEB-DL.DDP5.1.x264-",
-        "Movies/series/Temptation Island/Season 04/Temptation.Island.2019.S04E04.1080p.PCOK.WEB-DL.DDP5.1.x264-",
-        "Movies/series/Temptation Island/Season 04/Temptation.Island.2019.S04E05.1080p.PCOK.WEB-DL.DDP5.1.x264-",
-    ];
+    it("Should return true if episode matches format", async () => {
 
-    const match1 = await checkIfEpisodeMatchesFormatInBatch(episodesInWrongFormat);
-    expect(match1).toBe(false);
+        const episodesInRightFormat = [
+            "Movies/series/Temptation Island/Season 04/Temptation Island S04E03",
+            "Movies/series/Temptation Island/Season 04/Temptation Island S04E04",
+            "Movies/series/Temptation Island/Season 04/Temptation Island S04E05",
+        ]
+    
+        const match2 = await checkIfEpisodeMatchesFormatInBatch(episodesInRightFormat);
+        expect(match2).toBe(true);
 
-    const episodesInRightFormat = [
-        "Movies/series/Temptation Island/Season 04/Temptation Island S04E03",
-        "Movies/series/Temptation Island/Season 04/Temptation Island S04E04",
-        "Movies/series/Temptation Island/Season 04/Temptation Island S04E05",
-    ]
+        const episodesInRightFormat2 = [
+            "Movies/series/Family Guy/Season 01/Family Guy S01E03",
+            "Movies/series/Family Guy/Season 01/Family Guy S01E04",
+            "Movies/series/Family Guy/Season 01/Family Guy S01E05",
+        ]
+    
+        const match3 = await checkIfEpisodeMatchesFormatInBatch(episodesInRightFormat2);
+        expect(match3).toBe(true);
 
-    const match2 = await checkIfEpisodeMatchesFormatInBatch(episodesInRightFormat);
-    expect(match2).toBe(true);
+    }, defaultTimeout);
 
-}, defaultTimeout)
+    it("Should return false if episode does not match format", async () => {
+        
+        const episodesInWrongFormat = [
+            "Movies/series/Temptation Island/Season 04/Temptation.Island.2019.S04E03.1080p.PCOK.WEB-DL.DDP5.1.x264-",
+            "Movies/series/Temptation Island/Season 04/Temptation.Island.2019.S04E04.1080p.PCOK.WEB-DL.DDP5.1.x264-",
+            "Movies/series/Temptation Island/Season 04/Temptation.Island.2019.S04E05.1080p.PCOK.WEB-DL.DDP5.1.x264-",
+        ];
+    
+        const match1 = await checkIfEpisodeMatchesFormatInBatch(episodesInWrongFormat);
+        expect(match1).toBe(false);
+
+    }, defaultTimeout);
+
+});
