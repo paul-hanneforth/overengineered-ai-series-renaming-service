@@ -199,10 +199,11 @@ export async function getSeasonNumber(filePath) {
 
 /**
  * Goes through all the files and checks if they match the format 'Series Name - SXXEYY' If even one file does not match the format, return false. If all files match the format, return true.
+ * To accomplish this, the function uses the Ollama API.
  * @param {string[]} filePaths 
  * @returns {Promise<boolean>} returns true if all episodes match the format, false otherwise
  */
-export async function checkIfEpisodeMatchesFormatInBatch(filePaths) {
+export async function checkIfEpisodeMatchesFormatInBatchAI(filePaths) {
 
     const system = `It is your job to check whether the files, which represent episodes of a series, all match the following series format: 'Series Name SXXEYY'. Return a JSON object: { "matches": true | false }.
 If even one file does not match the format, return false. If all files match the format, return true. Be aware that all files need to follow the series format exactly without even one character difference. If you are unsure, return false. Return a JSON object: { "matches": true | false }.`;
@@ -292,6 +293,32 @@ If even one file does not match the format, return false. If all files match the
     } catch (error) {
         throw new Error(`Failed to check if episodes match format in batch from Ollama API: ${error.message}`);
     }
+
+}
+
+/**
+ * Goes through all the files and checks if they match the format 'Series Name - SXXEYY' If even one file does not match the format, return false. If all files match the format, return true.
+ * Returns true if the given list is empty.
+ * @param {string[]} filePaths 
+ * @returns {Promise<boolean>} returns true if all episodes match the format, false otherwise
+ */
+export async function checkIfEpisodeMatchesFormatInBatch(filePaths) {
+    if(filePaths.length === 0) {
+        return true;
+    }
+
+    const seriesName = await getSeriesName(filePaths[0]);
+    const seasonNumber = await getSeasonNumber(filePaths[0]);
+
+    const paddedSeasonNumber = seasonNumber.toString().padStart(2, '0');
+
+    const matches = filePaths.every(filePath => {
+        const fileName = path.basename(filePath);
+        const regex = new RegExp(`^${seriesName} S${paddedSeasonNumber}E\\d{2}$`);
+        return regex.test(fileName);
+    });
+
+    return matches;
 
 }
 
