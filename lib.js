@@ -303,39 +303,46 @@ If even one file does not match the format, return false. If all files match the
  * @returns {Promise<boolean>} returns true if all episodes match the format, false otherwise
  */
 export async function checkIfEpisodeMatchesFormatInBatch(filePaths) {
-    if(filePaths.length === 0) {
-        return true;
-    }
+    try {
 
-    const classification = await classifyFile(filePaths[0]);
-    if(classification !== 'Episode') {
-        logger.debug("Couldn't check if episode matches format in batch because the first file is not an episode. First file: ", filePaths[0]);
+        if(filePaths.length === 0) {
+            return true;
+        }
+    
+        const classification = await classifyFile(filePaths[0]);
+        if(classification !== 'Episode') {
+            logger.debug("Couldn't check if episode matches format in batch because the first file is not an episode. First file: ", filePaths[0]);
+            return false;
+        }
+        
+        const seriesName = await getSeriesName(filePaths[0]);
+        const seasonNumber = await getSeasonNumber(filePaths[0]);
+    
+        const paddedSeasonNumber = seasonNumber.toString().padStart(2, '0');
+    
+        const matches = filePaths.every(filePath => {
+            // remove the directory path and file extension, keep only the file name
+            const fileName = path.basename(filePath);
+            const fileNameWithoutExtension = path.parse(fileName).name;
+    
+            const exp = `^${seriesName} S${paddedSeasonNumber}E\\d{2}$`;
+            const regex = new RegExp(exp);
+            const match = regex.test(fileNameWithoutExtension);
+    
+            if(!match) {
+                logger.debug(`File "${fileNameWithoutExtension}" did not match the format ("${seriesName} S${paddedSeasonNumber}EXX").`);
+            }
+    
+            return match;
+        });
+    
+        return matches;
+
+    } catch(e) {
+        logger.error(`Failed to check if episodes match the correct format!`);
+        logger.trace(e);
         return false;
     }
-    
-    const seriesName = await getSeriesName(filePaths[0]);
-    const seasonNumber = await getSeasonNumber(filePaths[0]);
-
-    const paddedSeasonNumber = seasonNumber.toString().padStart(2, '0');
-
-    const matches = filePaths.every(filePath => {
-        // remove the directory path and file extension, keep only the file name
-        const fileName = path.basename(filePath);
-        const fileNameWithoutExtension = path.parse(fileName).name;
-
-        const exp = `^${seriesName} S${paddedSeasonNumber}E\\d{2}$`;
-        const regex = new RegExp(exp);
-        const match = regex.test(fileNameWithoutExtension);
-
-        if(!match) {
-            logger.debug(`File "${fileNameWithoutExtension}" did not match the format ("${seriesName} S${paddedSeasonNumber}EXX").`);
-        }
-
-        return match;
-    });
-
-    return matches;
-
 }
 
 /**
