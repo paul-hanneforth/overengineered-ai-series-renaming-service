@@ -46,6 +46,12 @@ test("Get details from filename", async () => {
 
 describe("Check if episode matches format", () => {
 
+    it("Should return true if no episodes are provided", async () => {
+
+        const match1 = await checkIfEpisodeMatchesFormatInBatch([]);
+        expect(match1).toBe(true);
+
+    }, defaultTimeout)
     it("Should return true if episode matches format", async () => {
 
         const episodesInRightFormat = [
