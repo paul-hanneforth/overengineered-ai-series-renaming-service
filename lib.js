@@ -159,7 +159,7 @@ export async function getSeriesName(filePath) {
             output: JSON.stringify({ 'series': "Star Wars The Clone Wars" })
         },
         {
-            input: '/rename/Movies/series/Rome (2005) - 1080p Bluray AV1 OPUS 5.1 -jenkins/Season 01/Rome S01E01.mkv',
+            input: '/rename/Movies/series/Rome (2005) - 1080p Bluray AV1 OPUS 5.1 -jenkins/Season 01/Rome (2005) S01E01.mkv',
             output: JSON.stringify({ 'series': "Rome" })
         }
     ]
