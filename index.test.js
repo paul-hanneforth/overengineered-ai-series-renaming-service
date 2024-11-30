@@ -40,7 +40,7 @@ describe("Get series name from filename", () => {
 
     it("Should return the series name without the year", async () => {
 
-        const showName = await getSeriesName("/rename/Movies/series/Rome (2005) - 1080p Bluray AV1 OPUS 5.1 -jenkins/Season 01");
+        const showName = await getSeriesName("/rename/Movies/series/Rome (2005) - 1080p Bluray AV1 OPUS 5.1 -jenkins/Season 01/Rome S01E01.mkv");
         expect(showName).toBe("Rome");
 
     });
