@@ -35,6 +35,10 @@ test("Get series name from filename", async () => {
 
     expect(showName).toBe("Temptation Island");
 
+    const showName2 = await getSeriesName("/rename/Movies/series/Star Wars The Clone Wars/Season S02/The Clone Wars S02E20.mkv");
+
+    expect(showName2).toBe("Star Wars The Clone Wars");
+
 });
 
 describe("Classify file", () => {
