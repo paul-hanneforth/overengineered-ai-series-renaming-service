@@ -29,15 +29,28 @@ test("Get season number from filename", async () => {
 
 });
 
-test("Get series name from filename", async () => {
+describe("Get series name from filename", () => {
 
-    const showName = await getSeriesName("Movies/series/Temptation Island/Season 04/Temptation.Island.2019.S04E03.1080p.PCOK.WEB-DL.DDP5.1.x264-");
+    it("Should return the series name", async () => {
 
-    expect(showName).toBe("Temptation Island");
+        const showName = await getSeriesName("Movies/series/Temptation Island/Season 04/Temptation.Island.2019.S04E03.1080p.PCOK.WEB-DL.DDP5.1.x264-");
+        expect(showName).toBe("Temptation Island");
 
-    const showName2 = await getSeriesName("/rename/Movies/series/Star Wars The Clone Wars/Season S02/The Clone Wars S02E20.mkv");
+    });
 
-    expect(showName2).toBe("Star Wars The Clone Wars");
+    it("Should return the series name without the year", async () => {
+
+        const showName = await getSeriesName("/rename/Movies/series/Rome (2005) - 1080p Bluray AV1 OPUS 5.1 -jenkins/Season 01");
+        expect(showName).toBe("Rome");
+
+    });
+
+    it("Should return the series name without any additions", async () => {
+        
+        const showName = await getSeriesName("/rename/Movies/series/Star Wars The Clone Wars/Season S02/The Clone Wars S02E20.mkv");
+        expect(showName).toBe("Star Wars The Clone Wars");
+    
+    });
 
 });
 
