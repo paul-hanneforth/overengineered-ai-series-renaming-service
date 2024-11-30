@@ -153,6 +153,10 @@ export async function getSeriesName(filePath) {
         {
             input: '/Volumes/Movies/series/Family Guy/Season 03/Family Guy - S03E05 - And The Wiener Is.mkv',
             output: JSON.stringify({ 'series': "Family Guy" })
+        },
+        {
+            input: '/rename/Movies/series/Star Wars The Clone Wars/Season S02/The Clone Wars S02E20.mkv',
+            output: JSON.stringify({ 'series': "Star Wars The Clone Wars" })
         }
     ]
 
