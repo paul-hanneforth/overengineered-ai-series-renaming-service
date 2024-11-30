@@ -47,7 +47,7 @@ describe("Get series name from filename", () => {
 
     it("Should return the series name without any additions", async () => {
         
-        const showName = await getSeriesName("/rename/Movies/series/Star Wars The Clone Wars/Season S02/The Clone Wars S02E20.mkv");
+        const showName = await getSeriesName("/rename/Movies/series/Star Wars The Clone Wars/Season S02/Star Wars The Clone Wars S02E20.mkv");
         expect(showName).toBe("Star Wars The Clone Wars");
     
     });
