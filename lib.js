@@ -470,3 +470,28 @@ Respond with a JSON object: { "classification": "Movie" | "Episode" | "Unrelated
         return 'Unrelated';  // Return 'Unrelated' as fallback in case of an error
     }
 };
+
+/**
+ * 
+ * @param {string} dir 
+ */
+export const printFoldersWithWrongFormat = async (dir) => {
+    const result = await traverseDirectory(dir);
+
+    const matchesFormat = await checkIfEpisodeMatchesFormatInBatch(result.files);
+
+    if(matchesFormat) {
+
+        // logger.info(`All files in ${dir} are already in the correct format.`);
+
+    } else {
+
+        logger.warn(`Files in ${dir} are not in the correct format:`);
+
+    }
+
+    // Also check files in subdirectories
+    for (const subfolder of result.subfolders) {
+        await printFoldersWithWrongFormat(subfolder.path);
+    }
+}
