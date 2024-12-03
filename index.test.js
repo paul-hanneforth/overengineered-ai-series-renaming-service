@@ -54,7 +54,7 @@ describe("Get series name from filename", () => {
 
     it("Should return the series name without the formats", async () => {
 
-        const showName = "Movies/series/KAOS, 2160p NF WEB-DL DD+ 5.1 Atmos H.265-NTb/Season 01/KAOS S01E01.mkv"
+        const showName = await getSeriesName("Movies/series/KAOS, 2160p NF WEB-DL DD+ 5.1 Atmos H.265-NTb/Season 01/KAOS S01E01.mkv")
         expect(showName).toBe("KAOS");
 
     })
