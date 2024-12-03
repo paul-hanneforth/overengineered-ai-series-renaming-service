@@ -149,7 +149,7 @@ export async function getEpisodeNumber(filePath) {
 export async function getSeriesName(filePath) {
 
     // Prepare prompt for Ollama
-    const system = "It is your job to extract the series name from file paths I give you. You will be given a file path and you must extract the series name from the file path or name. Return exactly the Series Name, without the year or any other additions/removals.Respond with a JSON object: { 'series': 'Series Name' }.";
+    const system = "It is your job to extract the full series name from file paths I give you. You will be given a file path and you must extract the complete series name from the file path or name. Return exactly the Series Name, without the year or any other additions/removals.Respond with a JSON object: { 'series': 'Series Name' }.";
 
     const examples = [
         {
@@ -163,7 +163,11 @@ export async function getSeriesName(filePath) {
         {
             input: '/rename/Movies/series/Rome (2005) - 1080p Bluray AV1 OPUS 5.1 -jenkins/Season 01/Rome (2005) S01E01.mkv',
             output: JSON.stringify({ 'series': "Rome" })
-        }
+        },
+        {
+            input: '/rename/Movies/series/Star Wars The Clone Wars/Season S04/Star Wars The Clone Wars S04E20.mkv',
+            output: JSON.stringify({ 'series': "Star Wars The Clone Wars" })
+        },
     ]
 
     try {
