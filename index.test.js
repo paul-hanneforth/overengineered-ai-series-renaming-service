@@ -1,4 +1,4 @@
-import { checkIfEpisodeMatchesFormatInBatch, classifyFile, getDetails, getEpisodeNumber, getSeasonNumber, getSeriesName } from "./lib";
+import { checkIfEpisodeMatchesFormatInBatch, classifyFile, generateNewFilePathIncludingParentFolders, getDetails, getEpisodeNumber, getSeasonNumber, getSeriesName } from "./lib";
 import { request } from "./api";
 import { jest } from '@jest/globals'
 
@@ -146,3 +146,26 @@ describe("Check if episode matches format", () => {
     });
 
 });
+
+describe("Generate correct parent folders", () => {
+
+    it("Should return the correct parent folders for an episode", async () => {
+
+        const episodeName = "The Last of Us S01E01.mkv"
+
+        const newEpisodeName = await generateNewFilePathIncludingParentFolders(episodeName);
+
+        expect(newEpisodeName).toBe("The Last of Us/Season 01/The Last of Us S01E01.mkv");
+
+    });
+    it("Should return the correct parent folders for an episode without any additions", async () => {
+
+        const episodeName = "Star Wars The Clone Wars S02E20.mkv"
+
+        const newEpisodeName = await generateNewFilePathIncludingParentFolders(episodeName);
+
+        expect(newEpisodeName).toBe("Star Wars The Clone Wars/Season 02/Star Wars The Clone Wars S02E20.mkv");
+
+    });
+
+})

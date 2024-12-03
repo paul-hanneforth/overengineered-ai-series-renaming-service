@@ -495,3 +495,20 @@ export const printFoldersWithWrongFormat = async (dir) => {
         await printFoldersWithWrongFormat(subfolder.path);
     }
 }
+
+/**
+ * 
+ * @param {string} fileName - file name with extension but without path. The file name needs to actually represent an episode.
+ * @returns {Promise<string>} - file path with correct parent folders  
+ */
+export const generateNewFilePathIncludingParentFolders = async (fileName) => {
+   
+    const fileNameWithoutExtension = path.parse(fileName).name;
+
+    const details = await getDetails(fileNameWithoutExtension);
+
+    const newPath = path.join(details.series, `Season ${details.season.toString().padStart(2, "0")}`, fileName);
+
+    return newPath;
+
+}
