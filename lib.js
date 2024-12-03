@@ -3,7 +3,9 @@ import path from 'path'
 import { request } from './api.js'
 import pino from 'pino'
 
-const logger = pino();
+const logger = pino({
+    level: process.env.NODE_ENV === "development" ? 'debug' : "info"
+});
 
 /**
  * @typedef {Object} Directory
@@ -512,3 +514,30 @@ export const generateNewFilePathIncludingParentFolders = async (fileName) => {
     return newPath;
 
 }
+
+/**
+ * 
+ * @param {string} dir 
+ */
+export const moveAllFilesToCorrectFolders = async (dir) => {
+
+    const files = fs.readdirSync(dir);
+
+    for(const file of files) {
+        try {
+            const newPath = await generateNewFilePathIncludingParentFolders(file);
+            const oldPath = path.join(dir, file);
+            const newFullPath = path.join(dir, newPath);
+
+            // ensure the parent folders exist
+            fs.mkdirSync(path.dirname(newFullPath), { recursive: true });
+
+            fs.renameSync(oldPath, newFullPath);
+
+            logger.info(`Moved: ${oldPath} -> ${newFullPath}`);
+        } catch(e) {
+            logger.error(`Failed to move ${file}: ${e.message}`);
+        }
+    }
+    
+};
