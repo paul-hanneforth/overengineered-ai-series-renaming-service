@@ -167,5 +167,14 @@ describe("Generate correct parent folders", () => {
         expect(newEpisodeName).toBe("Star Wars The Clone Wars/Season 02/Star Wars The Clone Wars S02E20.mkv");
 
     });
+    it("Should return the correct parent folders for an episode without any shortenings", async () => {
+
+        const episodeName = "Star Wars The Clone Wars S03E20.mkv"
+
+        const newEpisodeName = await generateNewFilePathIncludingParentFolders(episodeName);
+
+        expect(newEpisodeName).toBe("Star Wars The Clone Wars/Season 03/Star Wars The Clone Wars S03E20.mkv");
+
+    });
 
 })
