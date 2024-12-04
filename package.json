@@ -6,7 +6,7 @@
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "start": "node index.js | pino-pretty",
-    "dev": "node dev.js | pino-pretty"
+    "dev": "NODE_ENV='development' node dev.js | pino-pretty"
   },
   "keywords": [],
   "author": "",

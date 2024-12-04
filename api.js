@@ -1,7 +1,9 @@
 import { Ollama } from 'ollama'
 import pino from 'pino'
 
-const logger = pino();
+const logger = pino({
+    level: process.env.NODE_ENV === "development" ? 'debug' : "info"
+});
 
 // Setting up the Ollama API
 const ollama = new Ollama({
@@ -61,18 +63,6 @@ const request = async (system, input, examples = []) => {
 }
 
 /**
- * @typedef {object} Request
- * @property {string} system
- * @property {string} input
- * @property {Example[]} [ examples ]
- */
-/**
- * @typedef {object} RequestWithResponse
- * @property {Request} request
- * @property {object} response
- */
-
-/**
  * Request the Ollama API and ensures that only JSON is returned. If the request fails, the function will try again.
  * @param {string} system 
  * @param {string} input
@@ -81,7 +71,7 @@ const request = async (system, input, examples = []) => {
  * @param {string} examples[].output
  * @returns {Promise<object>} - A JSON object response from the Ollama API.
  */
-const requestWrapper = async (system, input, examples) => {
+const requestRetryWrapper = async (system, input, examples) => {
     let tries = 0;
 
     while (tries < 15) {
@@ -97,5 +87,65 @@ const requestWrapper = async (system, input, examples) => {
         }
     }
 }
+
+class RequestMap extends Map {
+    /**
+     * @param {Request} request 
+     * @returns {object}
+     */
+    get(request) {
+        return super.get(JSON.stringify(request));
+    }
+    /**
+     * @param {Request} request 
+     * @param {object} response 
+     */
+    set(request, response) {
+        return super.set(JSON.stringify(request), response);
+    }
+    /**
+     * @param {Request} request
+     * @returns {boolean}
+     */
+    has(request) {
+        return super.has(JSON.stringify(request));
+    }
+}
+
+/**
+ * @typedef {object} Request
+ * @property {string} system
+ * @property {string} input
+ * @property {Example[]} [ examples ]
+ */
+let requestCache = new RequestMap();
+
+/**
+ * Request the Ollama API and ensures that only JSON is returned. If the request fails, the function will try again. It will also cache the request and response.
+ * @param {string} system 
+ * @param {string} input
+ * @param {Object[]} [ examples ]
+ * @param {string} examples[].input
+ * @param {string} examples[].output
+ * @returns {Promise<object>} - A JSON object response from the Ollama API.
+ */
+const requestWrapper = async (system, input, examples) => {
+
+    // Check if the request has been cached
+    const request = { system, input, examples };
+    if (requestCache.has(request)) {
+        logger.debug(`Using cache: ${JSON.stringify(request)}`);
+        return requestCache.get(request);
+    }
+
+    // Request the Ollama API and cache the response
+    const response = await requestRetryWrapper(system, input, examples);
+    requestCache.set(request, response);
+
+    return response;
+
+}
+
+
 
 export { requestWrapper as request }
