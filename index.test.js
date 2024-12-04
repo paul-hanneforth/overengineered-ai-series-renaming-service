@@ -1,4 +1,4 @@
-import { checkIfEpisodeMatchesFormatInBatch, checkIfFileIsAlreadyInCorrectFoler, classifyFile, generateNewFilePathIncludingParentFolders, getDetails, getEpisodeNumber, getSeasonNumber, getSeriesName } from "./lib";
+import { checkIfEpisodeMatchesFormatInBatch, checkIfFileIsAlreadyInCorrectFoler, classifyFile, generateNewFilePathIncludingParentFolders, getDetails, getEpisodeNumber, getNewFilePathsIncludingParentFolders, getSeasonNumber, getSeriesName } from "./lib";
 import { request } from "./api";
 import { jest } from '@jest/globals'
 
@@ -208,3 +208,63 @@ describe("Check if episode is already in correct folder", () => {
     })
 
 })
+
+describe("Move all files to correct folders", () => {
+
+    it("Should move all episodes from the same seasons to correct folders", async () => {
+
+        const filePaths = [
+            "The Last of Us S01E01.mkv",
+            "The Last of Us S01E02.mkv",
+            "The Last of Us S01E03.mkv",
+            "The Last of Us S01E04.mkv",
+        ]
+
+        const result = await getNewFilePathsIncludingParentFolders(filePaths);
+
+        expect(result).toBe([
+            "The Last of Us/Season 01/The Last of Us S01E01.mkv",
+            "The Last of Us/Season 01/The Last of Us S01E02.mkv",
+            "The Last of Us/Season 01/The Last of Us S01E03.mkv",
+            "The Last of Us/Season 01/The Last of Us S01E04.mkv",
+        ])
+
+    });
+    it("Should move all episodes from different seasons to correct folders", async () => {
+
+        const filePaths = [
+            "The Last of Us S01E01.mkv",
+            "The Last of Us S02E02.mkv",
+            "The Last of Us S03E03.mkv",
+            "The Last of Us S04E04.mkv",
+        ]
+
+        const result = await getNewFilePathsIncludingParentFolders(filePaths);
+
+        expect(result).toBe([
+            "The Last of Us/Season 01/The Last of Us S01E01.mkv",
+            "The Last of Us/Season 02/The Last of Us S02E02.mkv",
+            "The Last of Us/Season 03/The Last of Us S03E03.mkv",
+            "The Last of Us/Season 04/The Last of Us S04E04.mkv",
+        ])
+
+    });
+    it("Should move all episodes from different series to correct folders", async () => {
+
+        const filePaths = [
+            "The Last of Us S01E01.mkv",
+            "The Mandalorian S02E02.mkv",
+            "The Witcher S01E03.mkv",
+        ]
+
+        const result = await getNewFilePathsIncludingParentFolders(filePaths);
+
+        expect(result).toBe([
+            "The Last of Us/Season 01/The Last of Us S01E01.mkv",
+            "The Mandalorian/Season 02/The Mandalorian S02E02.mkv",
+            "The Witcher/Season 01/The Witcher S01E03.mkv",
+        ])
+
+    });
+
+});

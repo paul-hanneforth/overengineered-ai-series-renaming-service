@@ -521,6 +521,17 @@ export const generateNewFilePathIncludingParentFolders = async (fileName) => {
 
 /**
  * 
+ * @param {string[]} filePaths - An array of file paths. Each file path actually needs to represent an episode and be the full path.
+ * @returns {Promise<string[]>} - An array of file paths with correct parent folders.
+ */
+export const getNewFilePathsIncludingParentFolders = async (filePaths) => {
+
+    throw "Not implemented yet";
+
+}
+
+/**
+ * 
  * @param {string} dir 
  */
 export const moveAllFilesToCorrectFolders = async (dir) => {
