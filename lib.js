@@ -557,9 +557,14 @@ export const moveAllFilesToCorrectFolders = async (dir) => {
 /**
  * 
  * @param {string} filePath - The full path to the file. The file path actually needs to represent an episode.
+ * @returns {Promise<boolean>} - Whether the file is already in the correct folder or not.
  */
 export const checkIfFileIsAlreadyInCorrectFoler = async (filePath) => {
 
-    throw "Not implemented yet";
+    const fileName = path.basename(filePath);
+
+    const newPath = await generateNewFilePathIncludingParentFolders(fileName);
+
+    return filePath.endsWith(newPath);
 
 }

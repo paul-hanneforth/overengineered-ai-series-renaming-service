@@ -186,7 +186,7 @@ describe("Generate correct parent folders", () => {
 
 })
 
-describe.skip("Check if episode is already in correct folder", () => {
+describe("Check if episode is already in correct folder", () => {
 
     it("Should return true if episode is already in correct folder", async () => {
             
