@@ -529,6 +529,14 @@ export const moveAllFilesToCorrectFolders = async (dir) => {
 
     for(const file of files) {
         try {
+
+            // Check whether the file is actually an episode
+            const classification = await classifyFile(file);
+            if(classification !== 'Episode') {
+                logger.info(`Skipping: ${file} (Not an episode)`);
+                continue;
+            }
+
             const newPath = await generateNewFilePathIncludingParentFolders(file);
             const oldPath = path.join(dir, file);
             const newFullPath = path.join(dir, newPath);
