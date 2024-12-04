@@ -537,6 +537,13 @@ export const moveAllFilesToCorrectFolders = async (dir) => {
                 continue;
             }
 
+            // Check if the file is already in the correct folder
+            const alreadyInCorrectFolder = await checkIfFileIsAlreadyInCorrectFoler(file);
+            if(alreadyInCorrectFolder) {
+                logger.info(`Skipping: ${file} (Already in correct folder)`);
+                continue;
+            }
+
             const newPath = await generateNewFilePathIncludingParentFolders(file);
             const oldPath = path.join(dir, file);
             const newFullPath = path.join(dir, newPath);
