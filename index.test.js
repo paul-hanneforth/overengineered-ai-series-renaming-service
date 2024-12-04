@@ -266,10 +266,10 @@ describe("Move all files to correct folders", () => {
         ])
 
     });
-    it.skip("Should move partially correct episodes to correct folders (when season is correct)", async () => {
+    it.skip("Should reuse existing parent folders (when season is correct)", async () => {
 
         const filePaths = [
-            "Season 01/The Last of Us S01E01.mkv",
+            "Random_Folder/Season 01/The Last of Us S01E01.mkv",
             "The Last of Us S02E02.mkv",
             "The Mandalorian S02E02.mkv",
             "The Witcher S01E03.mkv",
@@ -278,20 +278,20 @@ describe("Move all files to correct folders", () => {
         const result = await getNewFilePathsIncludingParentFolders(filePaths);
 
         expect(result).toStrictEqual([
-            "The Last of Us/Season 01/The Last of Us S01E01.mkv",
+            "Random_Folder/The Last of Us/Season 01/The Last of Us S01E01.mkv",
             "The Last of Us/Season 02/The Last of Us S02E02.mkv",
             "The Mandalorian/Season 02/The Mandalorian S02E02.mkv",
             "The Witcher/Season 01/The Witcher S01E03.mkv",
         ])
 
     });
-    it.skip("Should move partially correct episodes to correct folders (when series is correct)", async () => {
+    it.skip("Should reuse existing parent folders (when series is correct)", async () => {
 
         const filePaths = [
             "The Last of Us S01E01.mkv",
             "The Last of Us S02E02.mkv",
             "The Mandalorian/The Mandalorian S02E02.mkv",
-            "Season 01/The Witcher S01E03.mkv",
+            "Test/The Witcher/The Witcher S01E03.mkv",
         ]
 
         const result = await getNewFilePathsIncludingParentFolders(filePaths);
@@ -300,7 +300,7 @@ describe("Move all files to correct folders", () => {
             "The Last of Us/Season 01/The Last of Us S01E01.mkv",
             "The Last of Us/Season 02/The Last of Us S02E02.mkv",
             "The Mandalorian/Season 02/The Mandalorian S02E02.mkv",
-            "The Witcher/Season 01/The Witcher S01E03.mkv",
+            "Test/The Witcher/Season 01/The Witcher S01E03.mkv",
         ])
 
     });
