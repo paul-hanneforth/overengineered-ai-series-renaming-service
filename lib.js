@@ -526,7 +526,18 @@ export const generateNewFilePathIncludingParentFolders = async (fileName) => {
  */
 export const getNewFilePathsIncludingParentFolders = async (filePaths) => {
 
-    throw "Not implemented yet";
+    let newFilePaths = [];
+
+    for(const fullFilePath of filePaths) {
+        
+        const fileName = path.basename(fullFilePath);
+        const newPath = await generateNewFilePathIncludingParentFolders(fileName);
+
+        newFilePaths.push(path.join(path.dirname(fullFilePath), newPath));
+        
+    }
+
+    return newFilePaths;
 
 }
 

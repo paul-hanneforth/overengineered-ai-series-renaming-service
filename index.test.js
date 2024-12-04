@@ -209,7 +209,7 @@ describe("Check if episode is already in correct folder", () => {
 
 })
 
-describe.skip("Move all files to correct folders", () => {
+describe("Move all files to correct folders", () => {
 
     it("Should move all episodes from the same seasons to correct folders", async () => {
 
@@ -266,7 +266,7 @@ describe.skip("Move all files to correct folders", () => {
         ])
 
     });
-    it("Should move partially correct episodes to correct folders (when season is correct)", async () => {
+    it.skip("Should move partially correct episodes to correct folders (when season is correct)", async () => {
 
         const filePaths = [
             "Season 01/The Last of Us S01E01.mkv",
@@ -285,7 +285,7 @@ describe.skip("Move all files to correct folders", () => {
         ])
 
     });
-    it("Should move partially correct episodes to correct folders (when series is correct)", async () => {
+    it.skip("Should move partially correct episodes to correct folders (when series is correct)", async () => {
 
         const filePaths = [
             "The Last of Us S01E01.mkv",
@@ -304,7 +304,7 @@ describe.skip("Move all files to correct folders", () => {
         ])
 
     });
-    it("Should skip already correct episodes", async () => {
+    it.skip("Should skip already correct episodes", async () => {
 
         const filePaths = [
             "The Last of Us/Season 01/The Last of Us S01E01.mkv",
