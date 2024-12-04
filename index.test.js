@@ -1,4 +1,4 @@
-import { checkIfEpisodeMatchesFormatInBatch, classifyFile, generateNewFilePathIncludingParentFolders, getDetails, getEpisodeNumber, getSeasonNumber, getSeriesName } from "./lib";
+import { checkIfEpisodeMatchesFormatInBatch, checkIfFileIsAlreadyInCorrectFoler, classifyFile, generateNewFilePathIncludingParentFolders, getDetails, getEpisodeNumber, getSeasonNumber, getSeriesName } from "./lib";
 import { request } from "./api";
 import { jest } from '@jest/globals'
 
@@ -183,5 +183,28 @@ describe("Generate correct parent folders", () => {
         expect(newEpisodeName).toBe("Star Wars The Clone Wars/Season 03/Star Wars The Clone Wars S03E20.mkv");
 
     });
+
+})
+
+describe.skip("Check if episode is already in correct folder", () => {
+
+    it("Should return true if episode is already in correct folder", async () => {
+            
+        const episodeName = "The Last of Us/Season 01/The Last of Us S01E01.mkv"
+
+        const correctFolder = await checkIfFileIsAlreadyInCorrectFoler(episodeName);
+
+        expect(correctFolder).toBe(true);
+    
+    })
+    it("Should return false if episode is not in correct folder", async () => {
+
+        const episodeName = "The Last of Us S01E01.mkv"
+
+        const correctFolder = await checkIfFileIsAlreadyInCorrectFoler(episodeName);
+
+        expect(correctFolder).toBe(false);
+
+    })
 
 })

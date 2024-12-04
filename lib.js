@@ -553,3 +553,13 @@ export const moveAllFilesToCorrectFolders = async (dir) => {
     }
     
 };
+
+/**
+ * 
+ * @param {string} filePath - The full path to the file. The file path actually needs to represent an episode.
+ */
+export const checkIfFileIsAlreadyInCorrectFoler = async (filePath) => {
+
+    throw "Not implemented yet";
+
+}
