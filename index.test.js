@@ -222,7 +222,7 @@ describe.skip("Move all files to correct folders", () => {
 
         const result = await getNewFilePathsIncludingParentFolders(filePaths);
 
-        expect(result).toBe([
+        expect(result).toStrictEqual([
             "The Last of Us/Season 01/The Last of Us S01E01.mkv",
             "The Last of Us/Season 01/The Last of Us S01E02.mkv",
             "The Last of Us/Season 01/The Last of Us S01E03.mkv",
@@ -241,7 +241,7 @@ describe.skip("Move all files to correct folders", () => {
 
         const result = await getNewFilePathsIncludingParentFolders(filePaths);
 
-        expect(result).toBe([
+        expect(result).toStrictEqual([
             "The Last of Us/Season 01/The Last of Us S01E01.mkv",
             "The Last of Us/Season 02/The Last of Us S02E02.mkv",
             "The Last of Us/Season 03/The Last of Us S03E03.mkv",
@@ -259,7 +259,7 @@ describe.skip("Move all files to correct folders", () => {
 
         const result = await getNewFilePathsIncludingParentFolders(filePaths);
 
-        expect(result).toBe([
+        expect(result).toStrictEqual([
             "The Last of Us/Season 01/The Last of Us S01E01.mkv",
             "The Mandalorian/Season 02/The Mandalorian S02E02.mkv",
             "The Witcher/Season 01/The Witcher S01E03.mkv",
@@ -277,7 +277,7 @@ describe.skip("Move all files to correct folders", () => {
 
         const result = await getNewFilePathsIncludingParentFolders(filePaths);
 
-        expect(result).toBe([
+        expect(result).toStrictEqual([
             "The Last of Us/Season 01/The Last of Us S01E01.mkv",
             "The Last of Us/Season 02/The Last of Us S02E02.mkv",
             "The Mandalorian/Season 02/The Mandalorian S02E02.mkv",
@@ -296,7 +296,7 @@ describe.skip("Move all files to correct folders", () => {
 
         const result = await getNewFilePathsIncludingParentFolders(filePaths);
 
-        expect(result).toBe([
+        expect(result).toStrictEqual([
             "The Last of Us/Season 01/The Last of Us S01E01.mkv",
             "The Last of Us/Season 02/The Last of Us S02E02.mkv",
             "The Mandalorian/Season 02/The Mandalorian S02E02.mkv",
@@ -315,7 +315,7 @@ describe.skip("Move all files to correct folders", () => {
 
         const result = await getNewFilePathsIncludingParentFolders(filePaths);
 
-        expect(result).toBe([
+        expect(result).toStrictEqual([
             "The Last of Us/Season 01/The Last of Us S01E01.mkv",
             "The Last of Us/Season 01/The Last of Us S01E02.mkv",
             "The Mandalorian/Season 02/The Mandalorian S02E02.mkv",
