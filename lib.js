@@ -504,18 +504,20 @@ export const printFoldersWithWrongFormat = async (dir) => {
 
 /**
  * 
- * @param {string} fileName - file name with extension but without path. The file name needs to actually represent an episode.
- * @returns {Promise<string>} - file path with correct parent folders  
+ * @param {string} filePath - file name with extension with. The file name needs to actually represent an episode.
+ * @returns {Promise<string>} - file path with correct parent folders. Be aware that it tries to reuse existing parent folders.  
  */
-export const generateNewFilePathIncludingParentFolders = async (fileName) => {
+export const generateNewFilePathIncludingParentFolders = async (filePath) => {
    
+    const fileName = path.basename(filePath);
     const fileNameWithoutExtension = path.parse(fileName).name;
 
     const details = await getDetails(fileNameWithoutExtension);
 
     const newPath = path.join(details.series, `Season ${details.season.toString().padStart(2, "0")}`, fileName);
+    const completePath = path.join(path.dirname(filePath), newPath);
 
-    return newPath;
+    return completePath;
 
 }
 
@@ -530,8 +532,8 @@ export const getNewFilePathsIncludingParentFolders = async (filePaths) => {
 
     for(const fullFilePath of filePaths) {
         
-        const fileName = path.basename(fullFilePath);
-        const newPath = await generateNewFilePathIncludingParentFolders(fileName);
+        // const fileName = path.basename(fullFilePath);
+        const newPath = await generateNewFilePathIncludingParentFolders(fullFilePath);
 
         newFilePaths.push(path.join(path.dirname(fullFilePath), newPath));
         
@@ -566,7 +568,8 @@ export const moveAllFilesToCorrectFolders = async (dir) => {
                 continue;
             }
 
-            const newPath = await generateNewFilePathIncludingParentFolders(file);
+            const fullPath = path.join(dir, file);
+            const newPath = await generateNewFilePathIncludingParentFolders(fullPath);
             const oldPath = path.join(dir, file);
             const newFullPath = path.join(dir, newPath);
 
