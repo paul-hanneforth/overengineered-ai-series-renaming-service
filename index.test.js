@@ -266,5 +266,62 @@ describe.skip("Move all files to correct folders", () => {
         ])
 
     });
+    it("Should move partially correct episodes to correct folders (when season is correct)", async () => {
+
+        const filePaths = [
+            "Season 01/The Last of Us S01E01.mkv",
+            "The Last of Us S02E02.mkv",
+            "The Mandalorian S02E02.mkv",
+            "The Witcher S01E03.mkv",
+        ]
+
+        const result = await getNewFilePathsIncludingParentFolders(filePaths);
+
+        expect(result).toBe([
+            "The Last of Us/Season 01/The Last of Us S01E01.mkv",
+            "The Last of Us/Season 02/The Last of Us S02E02.mkv",
+            "The Mandalorian/Season 02/The Mandalorian S02E02.mkv",
+            "The Witcher/Season 01/The Witcher S01E03.mkv",
+        ])
+
+    });
+    it("Should move partially correct episodes to correct folders (when series is correct)", async () => {
+
+        const filePaths = [
+            "The Last of Us S01E01.mkv",
+            "The Last of Us S02E02.mkv",
+            "The Mandalorian/The Mandalorian S02E02.mkv",
+            "Season 01/The Witcher S01E03.mkv",
+        ]
+
+        const result = await getNewFilePathsIncludingParentFolders(filePaths);
+
+        expect(result).toBe([
+            "The Last of Us/Season 01/The Last of Us S01E01.mkv",
+            "The Last of Us/Season 02/The Last of Us S02E02.mkv",
+            "The Mandalorian/Season 02/The Mandalorian S02E02.mkv",
+            "The Witcher/Season 01/The Witcher S01E03.mkv",
+        ])
+
+    });
+    it("Should skip already correct episodes", async () => {
+
+        const filePaths = [
+            "The Last of Us/Season 01/The Last of Us S01E01.mkv",
+            "The Last of Us/Season 01/The Last of Us S01E02.mkv",
+            "The Mandalorian/Season 02/The Mandalorian S02E02.mkv",
+            "The Witcher/Season 01/The Witcher S01E03.mkv",
+        ]
+
+        const result = await getNewFilePathsIncludingParentFolders(filePaths);
+
+        expect(result).toBe([
+            "The Last of Us/Season 01/The Last of Us S01E01.mkv",
+            "The Last of Us/Season 01/The Last of Us S01E02.mkv",
+            "The Mandalorian/Season 02/The Mandalorian S02E02.mkv",
+            "The Witcher/Season 01/The Witcher S01E03.mkv",
+        ])
+
+    });
 
 });
