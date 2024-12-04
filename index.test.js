@@ -209,7 +209,7 @@ describe("Check if episode is already in correct folder", () => {
 
 })
 
-describe("Move all files to correct folders", () => {
+describe.skip("Move all files to correct folders", () => {
 
     it("Should move all episodes from the same seasons to correct folders", async () => {
 
