@@ -9,12 +9,15 @@ const ollama = new Ollama({
 })
 
 /**
+ * @typedef {Object} Example
+ * @property {string} input
+ * @property {string} output
+ */
+/**
  * Request the Ollama API and ensures that only JSON is returned 
  * @param {string} system 
  * @param {string} input
- * @param {Object[]} examples
- * @param {string} examples[].input
- * @param {string} examples[].output
+ * @param {Example[]} examples
  * @returns {Promise<object>} - A JSON object response from the Ollama API.
  */
 const request = async (system, input, examples = []) => {
@@ -56,6 +59,14 @@ const request = async (system, input, examples = []) => {
         throw new Error(error);
     }
 }
+
+/**
+ * @typedef {Object} Request
+ * @property {string} system
+ * @property {string} input
+ * @property {Example[]} [ examples ]
+ * @property {Object} response
+ */
 
 /**
  * Request the Ollama API and ensures that only JSON is returned. If the request fails, the function will try again.
