@@ -9,7 +9,7 @@ const ollama = new Ollama({
 })
 
 /**
- * @typedef {Object} Example
+ * @typedef {object} Example
  * @property {string} input
  * @property {string} output
  */
@@ -61,11 +61,15 @@ const request = async (system, input, examples = []) => {
 }
 
 /**
- * @typedef {Object} Request
+ * @typedef {object} Request
  * @property {string} system
  * @property {string} input
  * @property {Example[]} [ examples ]
- * @property {Object} response
+ */
+/**
+ * @typedef {object} RequestWithResponse
+ * @property {Request} request
+ * @property {object} response
  */
 
 /**
