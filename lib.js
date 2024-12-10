@@ -168,6 +168,10 @@ export async function getSeriesName(filePath) {
             input: '/rename/Movies/series/Star Wars The Clone Wars/Season S04/Star Wars The Clone Wars S04E20.mkv',
             output: JSON.stringify({ 'series': "Star Wars The Clone Wars" })
         },
+        {
+            input: '/Volumes/Movies/encoded-series/move/3 Body Problem S01E02.mkv',
+            output: JSON.stringify({ 'series': "3 Body Problem" })
+        }
     ]
 
     try {
