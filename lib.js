@@ -435,9 +435,8 @@ export const classifyFile = async (filePath) => {
     try {
         // Prepare the prompt for the Ollama API
         const system = `It is your job to classify file paths I give you. 
-You have to give me your response in the JSON Format. 
 You will be given a file path and you must classify it as a { "classification": "Movie" }, an { "classification": "Episode" }, or { "classification": "Unrelated" }. 
-If the file ending is the file ending of a video file it is most likely a movie or episode. If it doesn't contain a season and episode number, it is most likely a movie.
+If the file ending is the file ending of a video file it is most likely a movie or episode. If it doesn't contain a season and episode number, it is most likely a movie. If the file name contains the word "Movie" it is most likely a movie.
 If you are unsure or the file is unrelated, classify it as 'Unrelated'. 
 Respond with a JSON object: { "classification": "Movie" | "Episode" | "Unrelated" }`;
 
@@ -461,6 +460,14 @@ Respond with a JSON object: { "classification": "Movie" | "Episode" | "Unrelated
             {
                 input: '/Volumes/Movies/series/output.txt',
                 output: JSON.stringify({ classification: "Unrelated" })
+            },
+            {
+                input: 'The Mandalorian/Season 02/info.txt',
+                output: JSON.stringify({ classification: "Unrelated" })
+            },
+            {
+                input: 'The Witcher/The Movie.mp4',
+                output: JSON.stringify({ classification: "Movie" })
             }
         ]
 
@@ -544,6 +551,26 @@ export const getNewFilePathsIncludingParentFolders = async (filePaths) => {
     }
 
     return newFilePaths;
+
+}
+
+/**
+ * 
+ * @param {string[]} filePaths - An array of file paths. Each file path must be the full path.
+ * @returns {Promise<string[]>} - An array of file paths that represent episodes.
+ */
+export const filterFilePathsByEpisode = async (filePaths) => {
+
+    let episodes = [];
+
+    for(const filePath of filePaths) {
+        const classification = await classifyFile(filePath);
+        if(classification === 'Episode') {
+            episodes.push(filePath);
+        }
+    }
+
+    return episodes;
 
 }
 

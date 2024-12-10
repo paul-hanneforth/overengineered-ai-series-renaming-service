@@ -1,4 +1,4 @@
-import { checkIfEpisodeMatchesFormatInBatch, checkIfFileIsAlreadyInCorrectFoler, classifyFile, generateNewFilePathIncludingParentFolders, getDetails, getEpisodeNumber, getNewFilePathsIncludingParentFolders, getSeasonNumber, getSeriesName } from "./lib";
+import { checkIfEpisodeMatchesFormatInBatch, checkIfFileIsAlreadyInCorrectFoler, classifyFile, filterFilePathsByEpisode, generateNewFilePathIncludingParentFolders, getDetails, getEpisodeNumber, getNewFilePathsIncludingParentFolders, getSeasonNumber, getSeriesName } from "./lib";
 import { request } from "./api";
 import { jest } from '@jest/globals'
 
@@ -325,3 +325,27 @@ describe("Move all files to correct folders", () => {
     });
 
 });
+
+describe("Filter files by episodes", () => {
+
+    it("Should only return episodes from a list of files that partially contain episodes", async () => {
+
+        const files = [
+            "The Last of Us/Season 01/The Last of Us S01E01.mkv",
+            "The Last of Us/Season 01/The Last of Us S01E02.mkv",
+            "The Mandalorian/Season 02/info.txt",
+            "The Witcher/The Movie.mp4",
+        ]
+
+        const episodes = [
+            "The Last of Us/Season 01/The Last of Us S01E01.mkv",
+            "The Last of Us/Season 01/The Last of Us S01E02.mkv",
+        ]
+
+        const result = await filterFilePathsByEpisode(files);
+
+        expect(result).toStrictEqual(episodes);
+
+    })
+
+})
