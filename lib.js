@@ -575,14 +575,13 @@ export const moveAllFilesToCorrectFolders = async (dir) => {
             const fullPath = path.join(dir, file);
             const newPath = await generateNewFilePathIncludingParentFolders(fullPath);
             const oldPath = path.join(dir, file);
-            const newFullPath = path.join(dir, newPath);
 
             // ensure the parent folders exist
-            fs.mkdirSync(path.dirname(newFullPath), { recursive: true });
+            fs.mkdirSync(path.dirname(newPath), { recursive: true });
 
-            fs.renameSync(oldPath, newFullPath);
+            fs.renameSync(oldPath, newPath);
 
-            logger.info(`Moved: ${oldPath} -> ${newFullPath}`);
+            logger.info(`Moved: ${oldPath} -> ${newPath}`);
         } catch(e) {
             logger.error(`Failed to move ${file}: ${e.message}`);
         }
