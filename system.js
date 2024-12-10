@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { checkIfFileIsAlreadyInCorrectFoler, classifyFile, generateNewFilePathIncludingParentFolders } from './lib';
+import { checkIfFileIsAlreadyInCorrectFoler, classifyFile, generateNewFilePathIncludingParentFolders } from './lib.js';
 import pino from 'pino'
 import path from 'path';
 
