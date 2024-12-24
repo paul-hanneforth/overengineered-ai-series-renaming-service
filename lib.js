@@ -157,6 +157,14 @@ export async function getSeriesName(filePath) {
             output: JSON.stringify({ 'series': "Family Guy" })
         },
         {
+            input: '[Anime Time] Attack On Titan (Complete Series) (S01-S04+OVA) [Dual Audio][BD][1080p][HEVC 10bit x265][AAC][Eng Sub]',
+            output: JSON.stringify({ 'series': "Attack On Titan" })
+        },
+        {
+            input: 'general/piracy-vbox-shared/rename/[Anime Time] Attack On Titan (Complete Series) (S01-S04+OVA) [Dual Audio][BD][1080p][HEVC 10bit x265][AAC][Eng Sub]/[Anime Time] Attack on titan (Season 02)/[Anime Time] Attack On Titan - 26.mkv',
+            output: JSON.stringify({ 'series': "Attack On Titan" })
+        },
+        {
             input: '/rename/Movies/series/Star Wars The Clone Wars/Season S02/Star Wars The Clone Wars S02E20.mkv',
             output: JSON.stringify({ 'series': "Star Wars The Clone Wars" })
         },
@@ -444,6 +452,10 @@ Respond with a JSON object: { "classification": "Movie" | "Episode" | "Unrelated
             {
                 input: '/Volumes/Movies/series/Family Guy/The Movie - Stewie Griffin The Untold Story (Uncensored)/Family Guy - Stewie Griffin The Untold Story (Uncensored).mkv',
                 output: JSON.stringify({ classification: 'Movie' })
+            },
+            {
+                input: 'general/piracy-vbox-shared/rename/[Anime Time] Attack On Titan (Complete Series) (S01-S04+OVA) [Dual Audio][BD][1080p][HEVC 10bit x265][AAC][Eng Sub]/[Anime Time] Attack on titan (Season 03)/NC/NCED 01.mkv',
+                output: JSON.stringify({ classification: 'Unrelated' })
             },
             {
                 input: '/Volumes/Movies/series/Family Guy/Season 03/Family Guy - S03E05 - And The Wiener Is.mkv',
