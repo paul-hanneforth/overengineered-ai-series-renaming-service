@@ -117,7 +117,11 @@ export async function getEpisodeNumber(filePath) {
         {
             input: '/Volumes/Movies/series/Family Guy/Season 03/Family Guy - S03E05 - And The Wiener Is.mkv',
             output: JSON.stringify({ 'episode': 5 })
-        }
+        },
+        {
+            input: 'general/piracy-vbox-shared/rename/[Anime Time] Attack On Titan (Complete Series) (S01-S04+OVA) [Dual Audio][BD][1080p][HEVC 10bit x265][AAC][Eng Sub]/[Anime Time] Attack on titan (Season 02)/[Anime Time] Attack On Titan - 26.mkv',
+            output: JSON.stringify({ 'episode': 26 })
+        },
     ]
 
     try {
@@ -208,8 +212,15 @@ export async function getSeasonNumber(filePath) {
     const system = "It is your job to extract the season number from file paths I give you. You will be given a file path and you must extract the season number from the file path or name. Please remember that sometimes the season numbers can be in weird formats Respond with a JSON object: { 'season': 'Season Number' }";
 
     try {
+        const examples = [
+            {
+                input: 'general/piracy-vbox-shared/rename/[Anime Time] Attack On Titan (Complete Series) (S01-S04+OVA) [Dual Audio][BD][1080p][HEVC 10bit x265][AAC][Eng Sub]/[Anime Time] Attack on titan (Season 02)/[Anime Time] Attack On Titan - 26.mkv',
+                output: JSON.stringify({ 'season': 2 })
+            },
+        ];
+
         // Call Ollama API
-        const jsonResponse = await request(system, filePath);
+        const jsonResponse = await request(system, filePath, examples);
         
         // check if the response contains the season number
         if (!jsonResponse.season) {
