@@ -491,6 +491,10 @@ Respond with a JSON object: { "classification": "Movie" | "Episode" | "Unrelated
             {
                 input: 'The Witcher/The Movie.mp4',
                 output: JSON.stringify({ classification: "Movie" })
+            },
+            {
+                input: '/Volumes/general/piracy-vbox-shared/rename/Attack On Titan (2013) - 1080p Blu-Ray AAC 2.0 x265-AnimeTime/Season 03/[Anime Time] Attack On Titan - 59.mkv',
+                output: JSON.stringify({ classification: "Episode" })
             }
         ]
 
