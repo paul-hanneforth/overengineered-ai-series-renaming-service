@@ -495,6 +495,18 @@ Respond with a JSON object: { "classification": "Movie" | "Episode" | "Unrelated
             {
                 input: '/Volumes/general/piracy-vbox-shared/rename/Attack On Titan (2013) - 1080p Blu-Ray AAC 2.0 x265-AnimeTime/Season 03/[Anime Time] Attack On Titan - 59.mkv',
                 output: JSON.stringify({ classification: "Episode" })
+            },
+            {
+                input: '/Volumes/general/piracy-vbox-shared/piracy-vbox-credentials.kdbx',
+                output: JSON.stringify({ classification: "Unrelated" })
+            },
+            {
+                input: '/Volumes/general/piracy-vbox-shared/rename/Berserk/Season 01/[SWORDS] Berserk (1997) - 24 [E15C75DD].mkv',
+                output: JSON.stringify({ classification: "Episode" })
+            },
+            {
+                input: '/Movies/downloaded/raw/Game.of.Thrones.S04.1080p.BluRay.AV1.Opus.5.1-onlyfaffs/Game.of.Thrones.S04E01.Two.Swords.1080p.BluRay.AV1.Opus.5.1-onlyfaffs.mkv',
+                output: JSON.stringify({ classification: "Episode" })
             }
         ]
 
