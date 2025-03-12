@@ -217,6 +217,10 @@ export async function getSeasonNumber(filePath) {
                 input: 'general/piracy-vbox-shared/rename/[Anime Time] Attack On Titan (Complete Series) (S01-S04+OVA) [Dual Audio][BD][1080p][HEVC 10bit x265][AAC][Eng Sub]/[Anime Time] Attack on titan (Season 02)/[Anime Time] Attack On Titan - 26.mkv',
                 output: JSON.stringify({ 'season': 2 })
             },
+            {
+                input: '/Volumes/Movies/downloaded/encode/Vinland Saga S01E24.mkv',
+                output: JSON.stringify({ 'season': 1 })
+            }
         ];
 
         // Call Ollama API
