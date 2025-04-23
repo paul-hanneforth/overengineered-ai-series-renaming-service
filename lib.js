@@ -183,6 +183,10 @@ export async function getSeriesName(filePath) {
         {
             input: '/Volumes/Movies/encoded-series/move/3 Body Problem S01E02.mkv',
             output: JSON.stringify({ 'series': "3 Body Problem" })
+        },
+        {
+            input: 'Daredevil Born Again S01 (2025)',
+            output: JSON.stringify({ 'series': "Daredevil Born Again" })
         }
     ]
 
@@ -219,6 +223,14 @@ export async function getSeasonNumber(filePath) {
             },
             {
                 input: '/Volumes/Movies/downloaded/encode/Vinland Saga S01E24.mkv',
+                output: JSON.stringify({ 'season': 1 })
+            },
+            {
+                input: 'Volumes/Movies/downloaded/raw/Black Mirror S07 (2025)/Black.Mirror S07E06.mkv ',
+                output: JSON.stringify({ 'season': 7 })
+            },
+            {
+                input: 'Daredevil Born Again S01 (2025)/Daredevil Born Again S01E06',
                 output: JSON.stringify({ 'season': 1 })
             }
         ];
