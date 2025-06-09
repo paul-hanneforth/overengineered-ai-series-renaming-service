@@ -9,7 +9,7 @@ services:
     healthcheck:
       test: [ "CMD", "ollama", "run", "llama3.2", "test" ]
       interval: 10s
-      timeout: 30s
+      timeout: 60s
       retries: 10
       start_period: 1s
   node_test:
